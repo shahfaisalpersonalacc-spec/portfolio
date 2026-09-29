@@ -1,4 +1,5 @@
 import Reveal from "./Reveal";
+import SplitTitle from "./SplitTitle";
 import { projects } from "../data";
 
 export default function Projects() {
@@ -6,14 +7,12 @@ export default function Projects() {
     <section className="section" id="work">
       <Reveal className="section-head">
         <p className="eyebrow">Selected work</p>
-        <h2 className="section-title">
-          Things I've <span className="title-accent">shipped.</span>
-        </h2>
+        <SplitTitle text={"Things I've *shipped.*"} />
       </Reveal>
       <div className="projects">
         {projects.map((p, i) => (
           <Reveal key={p.mark} delay={i * 0.05}>
-            <article className="project" data-cursor="view">
+            <article className="project spot" data-cursor="view">
               <div className={`project-visual project-visual-${p.variant}`}>
                 <span className="project-mark">{p.mark}</span>
                 <span className="project-metric">{p.metric}</span>

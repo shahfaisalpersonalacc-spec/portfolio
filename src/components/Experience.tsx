@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useSpring } from "motion/react";
 import Reveal from "./Reveal";
+import SplitTitle from "./SplitTitle";
 import { jobs } from "../data";
 
 export default function Experience() {
@@ -15,11 +16,7 @@ export default function Experience() {
     <section className="section" id="experience">
       <Reveal className="section-head">
         <p className="eyebrow">Experience</p>
-        <h2 className="section-title">
-          Five years,
-          <br />
-          <span className="title-accent">production only.</span>
-        </h2>
+        <SplitTitle text={"Five years,\n*production only.*"} />
       </Reveal>
       <div className="timeline" ref={railRef}>
         <div className="timeline-rail" aria-hidden="true">

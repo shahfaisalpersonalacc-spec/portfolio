@@ -1,4 +1,5 @@
 import Reveal from "./Reveal";
+import SplitTitle from "./SplitTitle";
 
 const facts = [
   { key: "Currently", val: "Software Developer @ Blostem" },
@@ -13,11 +14,7 @@ export default function About() {
     <section className="section" id="about">
       <Reveal className="section-head">
         <p className="eyebrow">About</p>
-        <h2 className="section-title">
-          Money UIs punish
-          <br />
-          sloppiness. <span className="title-accent">Good.</span>
-        </h2>
+        <SplitTitle text={"Money UIs punish\nsloppiness. *Good.*"} />
       </Reveal>
       <div className="about-grid">
         <Reveal className="about-text">

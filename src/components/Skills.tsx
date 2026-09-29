@@ -1,5 +1,6 @@
 import { motion, useReducedMotion } from "motion/react";
 import Reveal from "./Reveal";
+import SplitTitle from "./SplitTitle";
 import { skillGroups } from "../data";
 
 function Meter({ level }: { level: number }) {
@@ -23,16 +24,14 @@ export default function Skills() {
     <section className="section" id="skills">
       <Reveal className="section-head">
         <p className="eyebrow">Skills</p>
-        <h2 className="section-title">
-          Depth, <span className="title-accent">measured honestly.</span>
-        </h2>
+        <SplitTitle text={"Depth, *measured honestly.*"} />
         <p className="section-sub">
           Self-assessed on a five-point scale — what I'd stake a production incident on.
         </p>
       </Reveal>
       <div className="skills-grid">
         {skillGroups.map((group, gi) => (
-          <Reveal key={group.title} className="skill-group" delay={gi * 0.08}>
+          <Reveal key={group.title} className="skill-group spot" delay={gi * 0.08}>
             <h3 className="skill-group-title">{group.title}</h3>
             <ul>
               {group.skills.map((s) => (

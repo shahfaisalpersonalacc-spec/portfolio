@@ -1,5 +1,6 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence } from "motion/react";
+import { initSpotlight } from "./components/spotlight";
 import Preloader from "./components/Preloader";
 import Cursor from "./components/Cursor";
 import Navbar from "./components/Navbar";
@@ -18,6 +19,8 @@ export default function App() {
   const [ready, setReady] = useState(false);
   const [toast, setToast] = useState(false);
   const toastTimer = useRef<number>(undefined);
+
+  useEffect(() => initSpotlight(), []);
 
   const copyEmail = useCallback(async () => {
     try {

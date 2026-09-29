@@ -1,4 +1,5 @@
 import Reveal from "./Reveal";
+import SplitTitle from "./SplitTitle";
 import { EMAIL, LINKEDIN, PHONE } from "../data";
 
 export default function Contact({ onCopyEmail }: { onCopyEmail: () => void }) {
@@ -6,11 +7,7 @@ export default function Contact({ onCopyEmail }: { onCopyEmail: () => void }) {
     <section className="section contact" id="contact">
       <Reveal>
         <p className="eyebrow">Contact</p>
-        <h2 className="contact-title">
-          Let's build something
-          <br />
-          people <span className="title-accent">trust.</span>
-        </h2>
+        <SplitTitle className="contact-title" text={"Let's build something\npeople *trust.*"} />
         <button className="contact-email" type="button" data-cursor="hover" onClick={onCopyEmail}>
           <span>{EMAIL}</span>
           <span className="contact-email-hint">click to copy</span>

@@ -1,13 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
-import {
-  AnimatePresence,
-  motion,
-  useMotionValueEvent,
-  useReducedMotion,
-  useScroll,
-  useSpring,
-} from "motion/react";
-import { EMAIL, LINKEDIN } from "../data";
+import { motion, useMotionValueEvent, useScroll, useSpring } from "motion/react";
 
 type NavLink = { href: string; label: string; icon: ReactNode };
 
@@ -51,7 +43,7 @@ const links: NavLink[] = [
   },
   {
     href: "#experience",
-    label: "Experience",
+    label: "Journey",
     icon: icon(
       <>
         <rect x="3" y="7" width="18" height="13" rx="2" />
@@ -85,25 +77,15 @@ const links: NavLink[] = [
 ];
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState<string | null>(null);
-  const [open, setOpen] = useState(false);
   const [pct, setPct] = useState(0);
-  const reduced = useReducedMotion();
 
-  /* reading progress — vertical rail on the right edge */
+  /* reading progress — vertical rail on the right edge (desktop) */
   const { scrollYProgress } = useScroll();
   const fill = useSpring(scrollYProgress, { stiffness: 120, damping: 26, mass: 0.4 });
   useMotionValueEvent(scrollYProgress, "change", (v) =>
     setPct(Math.min(100, Math.max(0, Math.round(v * 100))))
   );
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 10);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   /* scrollspy — highlights whichever section is on screen */
   useEffect(() => {
@@ -121,14 +103,6 @@ export default function Navbar() {
     }
     return () => observer.disconnect();
   }, []);
-
-  /* lock page scroll while the mobile menu is open */
-  useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [open]);
 
   return (
     <>
@@ -159,7 +133,7 @@ export default function Navbar() {
         </a>
       </aside>
 
-      {/* ── Scroll progress rail, right edge ── */}
+      {/* ── Scroll progress rail, right edge (desktop) ── */}
       <div className="progress-rail" aria-hidden="true">
         <div className="progress-track">
           <motion.div className="progress-fill" style={{ scaleY: fill }} />
@@ -167,79 +141,28 @@ export default function Navbar() {
         <span className="progress-pct">{pct}%</span>
       </div>
 
-      {/* ── Mobile: compact top pill + burger ── */}
-      <header className={`nav ${scrolled ? "is-scrolled" : ""}`}>
-        <a className="nav-logo" href="#top" aria-label="Back to top">
-          <span className="nav-logo-text">
-            SF<span className="nav-logo-dot">.</span>
-          </span>
-        </a>
-        <button
-          className={`nav-burger ${open ? "is-open" : ""}`}
-          type="button"
-          aria-label={open ? "Close menu" : "Open menu"}
-          aria-expanded={open}
-          onClick={() => setOpen((v) => !v)}
-        >
-          <span />
-          <span />
-        </button>
-      </header>
+      {/* ── Mobile / tablet: floating logo + bottom tab bar ── */}
+      <a className="mini-logo" href="#top" aria-label="Back to top">
+        <span className="nav-logo-text">
+          SF<span className="nav-logo-dot">.</span>
+        </span>
+      </a>
 
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            className="menu"
-            initial={
-              reduced
-                ? { opacity: 0 }
-                : { clipPath: "circle(0% at calc(100% - 52px) 48px)" }
-            }
-            animate={
-              reduced
-                ? { opacity: 1 }
-                : { clipPath: "circle(150% at calc(100% - 52px) 48px)" }
-            }
-            exit={
-              reduced
-                ? { opacity: 0 }
-                : { clipPath: "circle(0% at calc(100% - 52px) 48px)" }
-            }
-            transition={{ duration: 0.55, ease: [0.65, 0.05, 0.36, 1] }}
-          >
-            <motion.nav
-              className="menu-links"
-              aria-label="Sections"
-              initial="hidden"
-              animate="show"
-              variants={{ hidden: {}, show: { transition: { staggerChildren: 0.07, delayChildren: 0.18 } } }}
-            >
-              {links.map((l, i) => (
-                <motion.a
-                  key={l.href}
-                  href={l.href}
-                  className={active === l.href ? "is-active" : ""}
-                  onClick={() => setOpen(false)}
-                  variants={{
-                    hidden: { y: 46, opacity: 0 },
-                    show: { y: 0, opacity: 1, transition: { duration: 0.55, ease: [0.2, 0.65, 0.3, 1] } },
-                  }}
-                >
-                  <span className="menu-index">0{i + 1}</span>
-                  {l.label}
-                </motion.a>
-              ))}
-            </motion.nav>
-            <div className="menu-meta">
-              <span>{EMAIL}</span>
-              <a href={LINKEDIN} target="_blank" rel="noopener noreferrer">
-                LinkedIn ↗
-              </a>
-              <span>Noida · India</span>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <nav className="tabbar" aria-label="Site navigation">
+        {links.map((l) => (
+          <a key={l.href} href={l.href} className={active === l.href ? "is-active" : ""}>
+            {active === l.href && (
+              <motion.span
+                className="tab-pill"
+                layoutId="tab-pill"
+                transition={{ type: "spring", stiffness: 420, damping: 34 }}
+              />
+            )}
+            <span className="tab-icon">{l.icon}</span>
+            <span className="tab-label">{l.label}</span>
+          </a>
+        ))}
+      </nav>
     </>
   );
 }
